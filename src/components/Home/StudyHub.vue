@@ -78,7 +78,7 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { ElCarousel, ElCarouselItem, ElIcon } from 'element-plus'
 import {
-  Reading, EditPen, School, Select, Files, Box, MagicStick,
+  Reading, EditPen, School, Select, Files, Box, MagicStick, UserFilled,
 } from '@element-plus/icons-vue'
 import DewButtonBar from '../ui/DewButtonBar.vue'
 import DewCard from '../ui/DewCard.vue'
@@ -109,6 +109,7 @@ const entryIcons = {
   resources: Files,
   '3d-print': Box,
   'llm': MagicStick,
+  'mentor-market': UserFilled,
 }
 
 // 轮播Banner数据
@@ -149,6 +150,20 @@ const studyEntries = ref([
   { id: '3d-print', title: '3D打印', description: '3D 模型打印预约', external: '/3dfarm/', color: '#06b6d4' },
   { id: 'llm', title: '大模型', description: '大模型 API 接口平台', route: '/ai-service', color: '#ec4899' },
 ])
+
+async function fetchMentorMarketEntry() {
+  try {
+    const res = await api.get('/mentor-market/featured')
+    if (res.data?.show_entry && !studyEntries.value.some(entry => entry.id === 'mentor-market')) {
+      studyEntries.value.splice(2, 0, {
+        id: 'mentor-market', title: '导生拼团', description: '选择和你一起成长的导生',
+        route: '/mentor-market', color: '#f97316',
+      })
+    }
+  } catch {
+    // 活动未配置、学员尚未开抢或接口暂不可用时，原有首页保持不变。
+  }
+}
 
 // ── 社区广场：推送最新帖子（真实 API + mock 兜底） ──
 const DEFAULT_AVATAR = 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
@@ -244,6 +259,7 @@ const handleEntryClick = (entry) => {
 
 onMounted(() => {
   fetchCommunityPosts()
+  fetchMentorMarketEntry()
 })
 </script>
 

@@ -31,6 +31,7 @@ import UiShowcaseView from './views/UiShowcaseView.vue';
 import MyFeedbacksComponent from './components/User/MyFeedbacksComponent.vue';
 import CampView from './views/CampView.vue';
 import CampHome from './views/CampHome.vue';
+import MentorMarketView from './views/MentorMarketView.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,6 +57,12 @@ const router = createRouter({
             path: '/camp',
             name: 'camp',
             component: CampView,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/mentor-market',
+            name: 'mentor-market',
+            component: MentorMarketView,
             meta: { requiresAuth: true }
         },
 
